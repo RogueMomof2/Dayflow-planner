@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#101116">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Dayflow">
+<link rel="manifest" href="manifest.webmanifest">
+<title>Dayflow — Life Planner</title>
+<style>
+:root{color-scheme:dark;--bg:#101116;--panel:#1a1b24;--panel2:#20212c;--line:#30313d;--text:#f5f3fc;--muted:#aaa8b8;--purple:#c5aeff;--green:#8bd8bb;--red:#ff9caa}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;padding:env(safe-area-inset-top) 0 calc(84px + env(safe-area-inset-bottom))}
+button,input,select,textarea{font:inherit}button{cursor:pointer;border:1px solid var(--line);background:var(--panel2);color:var(--text);border-radius:12px;padding:11px 13px}button.primary{background:#493c68;border-color:#7865a8}button.small{padding:6px 9px;font-size:13px}input,select,textarea{width:100%;background:#13141b;border:1px solid var(--line);color:var(--text);padding:12px;border-radius:11px;min-width:0}label{display:block;color:var(--muted);font-size:13px;margin:10px 0 5px}.app{max-width:760px;margin:auto;padding:18px 16px 28px}.brand{display:flex;align-items:center;gap:12px;margin:4px 0 18px}.logo{width:48px;height:48px;border-radius:15px;background:#29233f;color:var(--purple);display:grid;place-items:center;font-size:26px}.brand h1{font-size:20px;letter-spacing:2px;margin:0}.brand p{font-size:11px;letter-spacing:1px;color:var(--muted);margin:2px 0}.panel{background:var(--panel);border:1px solid #292a35;border-radius:18px;padding:16px;margin:12px 0}.hero{background:linear-gradient(145deg,#211d30,#191a23 68%)}.eyebrow{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.7px}.hero h2{margin:7px 0;font-size:25px}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px}.stat{border-top:1px solid #393544;padding-top:10px}.stat strong{display:block;font-size:23px}.stat span{color:var(--muted);font-size:11px}.green{color:var(--green)}.purple{color:var(--purple)}.muted{color:var(--muted)}h2{font-size:20px;margin:0 0 8px}h3{font-size:16px;margin:0 0 8px}.nav{position:fixed;z-index:5;bottom:0;left:0;right:0;padding:8px 8px calc(8px + env(safe-area-inset-bottom));background:#14151df2;backdrop-filter:blur(18px);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(6,1fr);gap:3px}.nav button{border:0;background:transparent;padding:7px 2px;color:var(--muted);font-size:11px;border-radius:10px}.nav button span{display:block;font-size:19px;margin-bottom:2px}.nav button.active{background:#302943;color:var(--purple)}.row{display:flex;align-items:center;gap:10px}.between{justify-content:space-between}.grow{flex:1;min-width:0}.task{display:flex;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid #2b2c37}.task:last-child{border-bottom:0}.task input[type=checkbox],.habit input[type=checkbox]{width:21px;height:21px;accent-color:#a68be8;flex-shrink:0}.task-title{font-weight:550}.task.done .task-title{text-decoration:line-through;color:#888797}.meta{font-size:12px;color:var(--muted)}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.formgrid .full{grid-column:1/-1}.hidden{display:none!important}.progress{height:7px;border-radius:99px;background:#333440;overflow:hidden;margin:10px 0}.progress div{height:100%;background:var(--green);width:0;transition:width .2s}.badge{display:inline-block;font-size:11px;padding:3px 7px;border-radius:99px;background:#302943;color:var(--purple)}.money{font-variant-numeric:tabular-nums}.empty{color:var(--muted);font-size:14px;padding:12px 0}.notice{font-size:12px;color:var(--muted);line-height:1.5}.danger{color:var(--red)}.mealrow,.expense-row{padding:11px 0;border-bottom:1px solid #2b2c37}.mealrow:last-child,.expense-row:last-child{border-bottom:0}.section-title{display:flex;justify-content:space-between;align-items:center;gap:10px}.settings-grid{display:grid;gap:10px}.toast{position:fixed;bottom:95px;left:16px;right:16px;margin:auto;max-width:500px;background:#353047;padding:12px 16px;border-radius:12px;display:none;z-index:9}@media(min-width:620px){.app{padding:24px}.nav{left:50%;right:auto;transform:translateX(-50%);width:min(760px,100%);border:1px solid var(--line);border-bottom:0;border-radius:16px 16px 0 0}.settings-grid{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<main class="app">
+<header class="brand"><div class="logo">◈</div><div><h1>DAYFLOW</h1><p>YOUR LIFE. IN SYNC.</p></div><div class="grow"></div><button class="small" id="installBtn" hidden>Install</button></header>
+<section class="panel hero">
+<div class="eyebrow" id="todayLabel"></div><h2>Make today count.</h2><div class="muted">Small steps. Less chaos. More room to breathe.</div>
+<div class="stats"><div class="stat"><span>TASKS DONE</span><strong id="taskStat">0/0</strong></div><div class="stat"><span>HABITS</span><strong class="green" id="habitStat">0/0</strong></div><div class="stat"><span>BUDGET LEFT*</span><strong class="green money" id="budgetStat">$0</strong></div></div>
+<div class="progress"><div id="taskProgress"></div></div><div class="notice">*Income minus the expenses entered here; not a bank balance.</div>
+</section>
+<section id="view"></section>
+</main>
+<nav class="nav" aria-label="Main navigation">
+<button data-tab="Today" class="active"><span>☑</span>Today</button><button data-tab="Schedule"><span>◷</span>Schedule</button><button data-tab="Home"><span>⌂</span>Home</button><button data-tab="Meals"><span>♨</span>Meals</button><button data-tab="Budget"><span>$</span>Budget</button><button data-tab="Habits"><span>✧</span>Habits</button>
+</nav>
+<div class="toast" id="toast" role="status"></div>
+<script>
+const $=s=>document.querySelector(s);
+const STORE='dayflow-v1-private';
+const defaultData=()=>({
+tasks:[
+{id:1,title:"Review today's priorities",category:"Personal",time:"08:00",date:todayISO(),done:false,repeat:"daily"},
+{id:2,title:"Work focus time",category:"Work",time:"09:00",date:todayISO(),done:false,repeat:"weekdays"},
+{id:3,title:"School pickup",category:"Family",time:"15:00",date:todayISO(),done:false,repeat:"weekdays"},
+{id:4,title:"Feed and care for pets",category:"Home",time:"16:30",date:todayISO(),done:false,repeat:"daily"},
+{id:5,title:"Prepare dinner",category:"Home",time:"17:30",date:todayISO(),done:false,repeat:"daily"},
+{id:6,title:"10-minute evening reset",category:"Home",time:"20:00",date:todayISO(),done:false,repeat:"daily"},
+{id:7,title:"Prepare for tomorrow",category:"Personal",time:"20:30",date:todayISO(),done:false,repeat:"daily"}],
+habits:[{id:1,name:"Drink water",doneDate:""},{id:2,name:"Move my body",doneDate:""},{id:3,name:"10-minute tidy",doneDate:""},{id:4,name:"Personal time",doneDate:""}],
+meals:[{id:1,day:"Monday",meal:"Breakfast",name:"Eggs and toast"},{id:2,day:"Monday",meal:"Lunch",name:"Leftovers or sandwiches"},{id:3,day:"Monday",meal:"Dinner",name:"Sheet-pan chicken and vegetables"},{id:4,day:"Tuesday",meal:"Dinner",name:"Taco bowls"},{id:5,day:"Wednesday",meal:"Dinner",name:"Pasta with meat sauce"}],
+expenses:[{id:1,name:"Housing and utilities",amount:2200,category:"Bills"},{id:2,name:"Debt payments",amount:1400,category:"Debt"},{id:3,name:"Groceries",amount:600,category:"Food"},{id:4,name:"Transportation",amount:350,category:"Transport"},{id:5,name:"Insurance and other bills",amount:450,category:"Bills"}],
+income:6200,notes:"",settings:{notifications:false,defaultRepeat:"daily"}
+});
+function todayISO(){let d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
+function load(){try{const x=JSON.parse(localStorage.getItem(STORE));if(x&&x.tasks&&x.expenses)return x}catch(e){}return defaultData()}
+let data=load(),tab='Today',installPrompt=null;
+function save(){localStorage.setItem(STORE,JSON.stringify(data));renderHeader()}
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function money(n){return new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',maximumFractionDigits:2}).format(n||0)}
+function toast(s){let el=$('#toast');el.textContent=s;el.style.display='block';setTimeout(()=>el.style.display='none',2600)}
+function renderHeader(){
+const now=new Date();$('#todayLabel').textContent=now.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'}).toUpperCase();
+let todayTasks=data.tasks.filter(t=>t.date===todayISO());let done=todayTasks.filter(t=>t.done).length;
+$('#taskStat').textContent=`${done}/${todayTasks.length}`;$('#habitStat').textContent=`${data.habits.filter(h=>h.doneDate===todayISO()).length}/${data.habits.length}`;
+$('#budgetStat').textContent=money(Number(data.income||0)-data.expenses.reduce((s,e)=>s+Number(e.amount||0),0));$('#taskProgress').style.width=(todayTasks.length?done/todayTasks.length*100:0)+'%';
+}
+function shell(title,subtitle,body,extra=''){return `<div class="panel"><div class="section-title"><div><h2>${title}</h2><div class="muted">${subtitle||''}</div></div>${extra}</div>${body}</div>`}
+function taskForm(){return `<form id="taskForm"><div class="formgrid"><div class="full"><label for="taskName">Task</label><input id="taskName" required maxlength="120" placeholder="What needs to get done?"></div><div><label>Category</label><select id="taskCategory"><option>Personal</option><option>Work</option><option>Family</option><option>Home</option><option>Errands</option></select></div><div><label>Time</label><input id="taskTime" type="time"></div><div><label>Date</label><input id="taskDate" type="date" value="${todayISO()}" required></div><div><label>Repeat</label><select id="taskRepeat"><option value="none">Does not repeat</option><option value="daily">Daily</option><option value="weekdays">Weekdays</option><option value="weekly">Weekly</option></select></div><div class="full"><button class="primary" type="submit">Save task</button></div></div></form>`}
+function taskList(filterToday=false){
+let list=data.tasks.filter(t=>!filterToday||t.date===todayISO()).sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time));
+if(!list.length)return '<div class="empty">No tasks here yet. Add one to get started.</div>';
+return list.map(t=>`<div class="task ${t.done?'done':''}"><input type="checkbox" data-task="${t.id}" ${t.done?'checked':''} aria-label="Complete ${esc(t.title)}"><div class="grow"><div class="task-title">${esc(t.title)}</div><div class="meta">${esc(t.date)} · ${t.time?esc(t.time):'Anytime'} · ${esc(t.category)} ${t.repeat&&t.repeat!=='none'?`· <span class="badge">${esc(t.repeat)}</span>`:''}</div></div><button class="small" data-delete-task="${t.id}" aria-label="Delete task">×</button></div>`).join('');
+}
+function render(){
+document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));
+let view=$('#view');
+if(tab==='Today')view.innerHTML=shell('Today’s checklist','Your tasks for today',`<div class="actions"><button class="primary" id="showTaskForm">＋ Add task</button><button id="resetToday">Uncheck today</button></div><div id="taskFormWrap" class="hidden" style="margin-top:14px">${taskForm()}</div><div id="taskList">${taskList(true)}</div>`);
+if(tab==='Schedule')view.innerHTML=shell('My schedule','Upcoming tasks and routines',`<div class="actions"><button class="primary" id="showTaskForm">＋ Add scheduled task</button><button id="calendarExport">Export calendar (.ics)</button></div><div id="taskFormWrap" class="hidden" style="margin-top:14px">${taskForm()}</div><div style="margin-top:12px" id="taskList">${taskList(false)}</div><p class="notice">Calendar export creates a file you can open on your iPhone and add to Apple Calendar. Changes do not automatically sync back from Calendar.</p>`);
+if(tab==='Home')view.innerHTML=shell('Home & family','Small resets keep the house moving',`<h3 class="purple">Daily reset</h3><div class="homechecks">${['Clear kitchen counters','Start or switch laundry','Tidy main living area','Feed pets and refresh water','Check school bags and supplies','Check pet habitats'].map((s,i)=>`<div class="task"><input type="checkbox" data-home="${i}" ${homeChecked(i)?'checked':''}><span>${s}</span></div>`).join('')}</div><h3 class="purple" style="margin-top:20px">Notes & brain dump</h3><textarea id="notes" rows="5" placeholder="Reminders, ideas, tomorrow’s priorities…">${esc(data.notes)}</textarea><div class="actions"><button id="saveNotes" class="primary">Save notes</button></div><p class="notice">Home reset checkmarks are saved for this day on this device.</p>`);
+if(tab==='Meals')view.innerHTML=shell('Meal planner','A simple weekly plan',`<form id="mealForm"><div class="formgrid"><div><label>Day</label><select id="mealDay">${['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'].map(x=>`<option>${x}</option>`).join('')}</select></div><div><label>Meal</label><select id="mealType">${['Breakfast','Lunch','Dinner','Snack'].map(x=>`<option>${x}</option>`).join('')}</select></div><div class="full"><label>Meal or recipe</label><input id="mealName" required maxlength="120" placeholder="e.g. Taco bowls"></div><div class="full"><button class="primary">Add meal</button></div></div></form><div style="margin-top:15px">${['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'].map(day=>{let ms=data.meals.filter(m=>m.day===day);return ms.length?`<h3 class="purple" style="margin-top:15px">${day}</h3>${ms.map(m=>`<div class="mealrow row"><div class="grow"><div class="meta">${esc(m.meal)}</div><div>${esc(m.name)}</div></div><button class="small" data-delete-meal="${m.id}">×</button></div>`).join('')}`:''}).join('')||'<div class="empty">Add your first meal above.</div>'}</div>`);
+if(tab==='Budget')view.innerHTML=shell('Budget center','Monthly plan · USD',`<label>Monthly take-home income</label><input id="income" type="number" min="0" step=".01" value="${Number(data.income)||0}"><div class="stats"><div class="stat"><span>EXPENSES</span><strong>${money(data.expenses.reduce((s,e)=>s+Number(e.amount),0))}</strong></div><div class="stat"><span>REMAINING</span><strong class="${Number(data.income)-data.expenses.reduce((s,e)=>s+Number(e.amount),0)<0?'danger':'green'}">${money(Number(data.income)-data.expenses.reduce((s,e)=>s+Number(e.amount),0))}</strong></div><div class="stat"><span>ITEMS</span><strong>${data.expenses.length}</strong></div></div><h3 style="margin-top:20px">Add an expense</h3><form id="expenseForm"><div class="formgrid"><div class="full"><label>Expense name</label><input id="expenseName" required maxlength="100" placeholder="e.g. Electricity"></div><div><label>Amount ($)</label><input id="expenseAmount" type="number" min="0" step=".01" required placeholder="0.00"></div><div><label>Category</label><select id="expenseCategory">${['Bills','Debt','Food','Transport','Savings','Family','Housing','Health','Subscriptions','Other'].map(x=>`<option>${x}</option>`).join('')}</select></div><div class="full"><button class="primary">Add expense</button></div></div></form><h3 style="margin-top:20px">Your expenses</h3>${data.expenses.map(e=>`<div class="expense-row row"><div class="grow"><div>${esc(e.name)}</div><div class="meta">${esc(e.category)}</div></div><strong class="money">${money(e.amount)}</strong><button class="small" data-delete-expense="${e.id}">×</button></div>`).join('')||'<div class="empty">No expenses entered.</div>'}<p class="notice">All figures are stored only in this browser on this device. This is a manual budget, not a bank connection or financial advice.</p>`);
+if(tab==='Habits')view.innerHTML=shell('Habits & wellbeing','Progress, not perfection',`<form id="habitForm" class="row"><input id="habitName" required maxlength="80" placeholder="Add a habit"><button class="primary">Add</button></form><div style="margin-top:12px">${data.habits.map(h=>`<div class="task"><input type="checkbox" data-habit="${h.id}" ${h.doneDate===todayISO()?'checked':''}><div class="grow">${esc(h.name)}</div><button class="small" data-delete-habit="${h.id}">×</button></div>`).join('')||'<div class="empty">Add a habit to start tracking.</div>'}</div><div class="actions"><button id="resetHabits">Reset today’s habits</button></div>`);
+bindView();renderHeader();
+}
+function homeKey(i){return 'dayflow-home-'+todayISO()+'-'+i}
+function homeChecked(i){return localStorage.getItem(homeKey(i))==='1'}
+function bindView(){
+$('#showTaskForm')?.addEventListener('click',()=>$('#taskFormWrap').classList.toggle('hidden'));
+$('#taskForm')?.addEventListener('submit',e=>{e.preventDefault();data.tasks.push({id:Date.now(),title:$('#taskName').value.trim(),category:$('#taskCategory').value,time:$('#taskTime').value,date:$('#taskDate').value,done:false,repeat:$('#taskRepeat').value});save();render();toast('Task saved on this device.')});
+$('#resetToday')?.addEventListener('click',()=>{data.tasks=data.tasks.map(t=>t.date===todayISO()?{...t,done:false}:t);save();render()});
+document.querySelectorAll('[data-task]').forEach(el=>el.addEventListener('change',()=>{data.tasks=data.tasks.map(t=>t.id===Number(el.dataset.task)?{...t,done:el.checked}:t);save();render()}));
+document.querySelectorAll('[data-delete-task]').forEach(el=>el.addEventListener('click',()=>{data.tasks=data.tasks.filter(t=>t.id!==Number(el.dataset.deleteTask));save();render()}));
+$('#mealForm')?.addEventListener('submit',e=>{e.preventDefault();data.meals.push({id:Date.now(),day:$('#mealDay').value,meal:$('#mealType').value,name:$('#mealName').value.trim()});save();render()});
+document.querySelectorAll('[data-delete-meal]').forEach(el=>el.addEventListener('click',()=>{data.meals=data.meals.filter(m=>m.id!==Number(el.dataset.deleteMeal));save();render()}));
+$('#income')?.addEventListener('change',()=>{data.income=Math.max(0,Number($('#income').value)||0);save();render()});
+$('#expenseForm')?.addEventListener('submit',e=>{e.preventDefault();data.expenses.push({id:Date.now(),name:$('#expenseName').value.trim(),amount:Math.max(0,Number($('#expenseAmount').value)||0),category:$('#expenseCategory').value});save();render()});
+document.querySelectorAll('[data-delete-expense]').forEach(el=>el.addEventListener('click',()=>{data.expenses=data.expenses.filter(x=>x.id!==Number(el.dataset.deleteExpense));save();render()}));
+$('#habitForm')?.addEventListener('submit',e=>{e.preventDefault();data.habits.push({id:Date.now(),name:$('#habitName').value.trim(),doneDate:''});save();render()});
+document.querySelectorAll('[data-habit]').forEach(el=>el.addEventListener('change',()=>{data.habits=data.habits.map(h=>h.id===Number(el.dataset.habit)?{...h,doneDate:el.checked?todayISO():''}:h);save();render()}));
+document.querySelectorAll('[data-delete-habit]').forEach(el=>el.addEventListener('click',()=>{data.habits=data.habits.filter(h=>h.id!==Number(el.dataset.deleteHabit));save();render()}));
+$('#resetHabits')?.addEventListener('click',()=>{data.habits=data.habits.map(h=>({...h,doneDate:''}));save();render()});
+document.querySelectorAll('[data-home]').forEach(el=>el.addEventListener('change',()=>{localStorage.setItem(homeKey(el.dataset.home),el.checked?'1':'0')}));
+$('#saveNotes')?.addEventListener('click',()=>{data.notes=$('#notes').value;save();toast('Notes saved privately on this device.')});
+$('#calendarExport')?.addEventListener('click',exportCalendar);
+}
+function exportCalendar(){
+const escICS=s=>String(s).replace(/\\/g,'\\\\').replace(/,/g,'\\,').replace(/;/g,'\\;').replace(/\n/g,'\\n');
+const dt=(date,time)=>{let [y,m,d]=date.split('-');let [hh,mm]=(time||'09:00').split(':');return `${y}${m}${d}T${hh}${mm}00`};
+let events=data.tasks.filter(t=>t.date).map(t=>{let start=dt(t.date,t.time||'09:00');let end=new Date(Number(t.date.slice(0,4)),Number(t.date.slice(5,7))-1,Number(t.date.slice(8,10)),Number((t.time||'09:00').slice(0,2)),Number((t.time||'09:00').slice(3,5))+30);let endStr=`${end.getFullYear()}${String(end.getMonth()+1).padStart(2,'0')}${String(end.getDate()).padStart(2,'0')}T${String(end.getHours()).padStart(2,'0')}${String(end.getMinutes()).padStart(2,'0')}00`;return `BEGIN:VEVENT\nUID:dayflow-${t.id}@local\nDTSTAMP:${dt(todayISO(),'12:00')}\nDTSTART:${start}\nDTEND:${endStr}\nSUMMARY:${escICS(t.title)}\nDESCRIPTION:${escICS(t.category+' · Created in Dayflow')}\nEND:VEVENT`}).join('\n');
+let content=`BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Dayflow//Life Planner//EN\nCALSCALE:GREGORIAN\n${events}\nEND:VCALENDAR`;
+downloadBlob(content,'dayflow-calendar.ics','text/calendar;charset=utf-8');toast('Calendar file created. Open it to add events to Apple Calendar.');
+}
+function downloadBlob(content,name,type){let a=document.createElement('a');let url=URL.createObjectURL(new Blob([content],{type}));a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000)}
+document.querySelectorAll('.nav button').forEach(b=>b.addEventListener('click',()=>{tab=b.dataset.tab;render()}));
+$('#installBtn').addEventListener('click',async()=>{if(installPrompt){installPrompt.prompt();await installPrompt.userChoice;installPrompt=null;$('#installBtn').hidden=true}else toast('On iPhone: Safari Share → Add to Home Screen.')});
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();installPrompt=e;$('#installBtn').hidden=false});
+render();
+if('serviceWorker' in navigator && location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js').catch(()=>{});
+</script>
+</body>
+</html>
